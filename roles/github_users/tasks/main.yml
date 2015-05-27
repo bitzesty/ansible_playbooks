@@ -19,5 +19,5 @@
   with_together:
     - ssh_keys.results
     - add_ssh_keys_from_github.usernames
-  changed_when: false # FIXME
+  changed_when: false
   when: "add_ssh_keys_from_github.usernames | count > 0"
