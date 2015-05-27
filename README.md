@@ -54,14 +54,14 @@ Add services to upstart (for now only shoryuken available)
 
 ### Third Party Recipies
 
-#### Locale (f500.locale) (roles/locales)
+#### Locale (f500.locale)
 
 https://github.com/f500/ansible-locale
 
 * Generate localisation files from templates (locale-gen).
 * Configure locale environment variables.
 
-#### Clamav (igor_mukhin.clamav) (roles/locales)
+#### Clamav (igor_mukhin.clamav)
 
 https://github.com/ansible-roles/ansible-role-clamav
 
