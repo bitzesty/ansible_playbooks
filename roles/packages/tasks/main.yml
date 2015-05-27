@@ -23,7 +23,8 @@
     - libffi-dev
     - libreadline-dev
     - libssl-dev
-    # - runit
+    - runit
+    - htop
 
 - name: install httplib2
   pip: name=httplib2
