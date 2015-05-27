@@ -1,0 +1,5 @@
+---
+- name: Restart Shoryuken
+  command: chdir="{{ current_path }}" bundle exec shoryuken -d -r ./app/jobs/scan_job.rb -C ./config/shoryuken.yml -L ./shoryuken.log -P ./shoryuken.pid
+  environment: "{{ command_environment }}"
+

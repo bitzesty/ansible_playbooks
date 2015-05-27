@@ -1,0 +1,7 @@
+---
+- name: Add ENV vars to deployer user's .bashrc
+  lineinfile: >
+    dest={{ home_directory }}/.bashrc
+    line='export {{ item.name }}={{ item.value }}'
+    insertbefore="# If not running interactively, don't do anything"
+  with_items: rbenv_environment_variables

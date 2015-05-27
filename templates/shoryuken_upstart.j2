@@ -1,0 +1,13 @@
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides: shoryuken
+# Required-Start: $remote_fs $syslog
+# Required-Stop: $remote_fs $syslog
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
+# Short-Description: Shoryuken
+# Description: This file starts and stops Shoryuken
+#
+### END INIT INFO
+
+/bin/su - {{ user }} -c "cd {{ current_release_path }} && bundle exec shoryuken -d -r {{ current_release_path }}/app/jobs/scan_job.rb -C {{ current_release_path }}/config/shoryuken.yml -L {{ current_release_path }}/shoryuken.log {% for key, value in app_environment_variables.items() %}{{ key }}={{ value }} {% endfor %}"

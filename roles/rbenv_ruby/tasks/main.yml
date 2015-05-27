@@ -1,0 +1,61 @@
+---
+- name: Clone rbenv repository
+  git: >
+    repo="git://github.com/sstephenson/rbenv.git"
+    dest={{ home_directory }}/.rbenv
+
+- name: Clone ruby-build repository
+  git: >
+    repo="git://github.com/sstephenson/ruby-build.git"
+    dest={{ home_directory }}/.rbenv/plugins/ruby-build
+
+- name: Clone rbenv-gem-rehash repository
+  git: >
+    repo="https://github.com/sstephenson/rbenv-gem-rehash.git"
+    dest={{ home_directory }}/.rbenv/plugins/rbenv-gem-rehash
+
+- name: Add RBENV_ROOT ~/.bashrc
+  lineinfile: >
+    dest={{ home_directory }}/.bashrc
+    line='export RBENV_ROOT="${HOME}/.rbenv"'
+    insertbefore="# If not running interactively, don't do anything"
+
+- name: Add export RBENV_ROOT to PATH in ~/.bashrc
+  lineinfile: >
+    dest={{ home_directory }}/.bashrc
+    line='export PATH="${RBENV_ROOT}/bin:${PATH}"'
+    insertbefore="# If not running interactively, don't do anything"
+
+- name: Add rbenv init to ~/.bashrc
+  lineinfile: >
+    dest={{ home_directory }}/.bashrc
+    line='eval "$(rbenv init -)"'
+    insertbefore="# If not running interactively, don't do anything"
+
+- name: check ruby {{ rbenv.ruby_version }} installed
+  shell: rbenv versions | grep {{ rbenv.ruby_version }}
+  register: ruby_installed
+  changed_when: false
+  ignore_errors: yes
+  always_run: yes
+
+- name: "Install ruby"
+  shell: rbenv install {{ rbenv.ruby_version }}
+  when: ruby_installed.stdout.find( rbenv.ruby_version ) == -1
+
+- name: "Rbenv rehash"
+  shell: rbenv rehash
+
+- name: "Make ruby as global"
+  shell: rbenv global {{ rbenv.ruby_version }}
+
+- name: Set --no-ri --no-rdoc to ~/.gemrc
+  shell: >
+    echo "gem: --no-ri --no-rdoc" > ~/.gemrc
+
+- name: "Install bundler"
+  shell: "gem install bundler"
+
+- name: "Rbenv rehash again"
+  shell: rbenv rehash
+

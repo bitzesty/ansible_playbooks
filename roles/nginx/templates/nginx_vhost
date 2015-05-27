@@ -1,0 +1,60 @@
+passenger_root /usr/lib/ruby/vendor_ruby/phusion_passenger/locations.ini;
+passenger_ruby {{ home_directory }}/.rbenv/shims/ruby;
+
+access_log /var/log/nginx/access.log;
+error_log /var/log/nginx/error.log;
+
+server {
+  listen 80;
+
+  location @passenger {
+    passenger_enabled on;
+    passenger_min_instances 5;
+    rails_env {{ rails_env }};
+  }
+
+  server_name {{ server_name }};
+
+  # Location of our static files
+  root {{ home_directory }}/{{ app_name }}/current/public;
+  try_files $uri @passenger;
+
+  location ~ ^/(assets|images|javascripts|stylesheets|swfs|system)/ {
+    gzip_static on;
+    expires max;
+    add_header Cache-Control public;
+    add_header Last-Modified "";
+    add_header ETag "";
+
+    open_file_cache max=1000 inactive=500s;
+    open_file_cache_valid 600s;
+    open_file_cache_errors on;
+    break;
+  }
+
+  client_max_body_size 10m;
+  keepalive_timeout 10;
+
+  error_page 500 502 504 /500.html;
+  error_page 503 @503;
+
+  location = /50x.html {
+    root html;
+  }
+
+  location = /404.html {
+    root html;
+  }
+
+  location @503 {
+    error_page 405 = /system/maintenance.html;
+    if (-f $document_root/system/maintenance.html) {
+      rewrite ^(.*)$ /system/maintenance.html break;
+    }
+    rewrite ^(.*)$ /503.html break;
+  }
+
+  if (-f $document_root/system/maintenance.html) {
+    return 503;
+  }
+}

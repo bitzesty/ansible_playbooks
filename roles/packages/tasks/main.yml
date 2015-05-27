@@ -1,0 +1,33 @@
+- name: "Run 'apt-get update'"
+  apt: update_cache=yes
+
+- name: "Install some packages"
+  apt: name={{ item }} state=present
+  with_items:
+    - curl
+    - build-essential
+    - git
+    - git-core
+    - python-software-properties
+    - python-pip
+    - libpq-dev
+    - zlib1g-dev
+    - nodejs
+    - imagemagick
+    - libmagickwand-dev
+    - sqlite3
+    - libsqlite3-dev
+    - libxslt1-dev
+    - libxml2-dev
+    - libcurl4-openssl-dev
+    - libffi-dev
+    - libreadline-dev
+    - libssl-dev
+    # - runit
+
+- name: install httplib2
+  pip: name=httplib2
+
+
+
+

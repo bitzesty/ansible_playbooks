@@ -1,0 +1,8 @@
+- name: Upstart Shoryuken | Copy shoryuken init file to /etc/init.d/
+  template:
+    src=../ansible_playbooks/templates/shoryuken_upstart.j2
+    dest=/etc/init.d/shoryuken
+    mode=755
+
+- name: Upstart Shoryuken | Add shoryuken init file to upstart
+  shell: update-rc.d shoryuken defaults 99

@@ -1,0 +1,10 @@
+{{ rails_env }}:
+  adapter: postgresql
+  encoding: unicode
+  database: {{ app_database_name }}
+  pool: 5
+  username: {{ app_database_username }}
+  password: {{ app_database_password }}
+  port: {{ app_database_port|default('5432') }}
+  host: {{ app_database_host|default('localhost') }}
+  min_messages: WARNING

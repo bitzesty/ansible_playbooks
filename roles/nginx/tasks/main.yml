@@ -1,0 +1,47 @@
+---
+- name: Install Passenger PGP key
+  apt_key: url='http://keyserver.ubuntu.com/pks/lookup?op=get&fingerprint=on&search=0xAC40B2F7' state=present
+
+- name: Add HTTPS support for apt
+  apt: name={{ item }} state=present update_cache=yes
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+
+- name: Find ubuntu/debian distro short name
+  shell: >
+    lsb_release -c | cut -d: -f2 | sed 's/\s//g'
+  register: distro
+
+- name: Add passenger source
+  template: src=passenger.list dest=/etc/apt/sources.list.d/passenger.list owner=ubuntu group=ubuntu mode=0644
+
+- name: Run apt-get update after adding passenger to sources
+  apt: update_cache=yes
+
+- name: Install packages
+  apt: name={{ item }} state=present
+  with_items:
+    - nginx-extras
+    - passenger
+
+- name: Update nginx.conf confirguration
+  template:
+    src=nginx_conf
+    dest=/etc/nginx/nginx.conf
+
+- name: Add /etc/nginx/sites-enabled/nginx_vhost.conf confirguration
+  template:
+    src=nginx_vhost
+    dest=/etc/nginx/sites-enabled/{{ app_name }}-nginx.conf
+
+- name: Remove default site configuration
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: Add Nginx to update-rc.d
+  shell: update-rc.d nginx defaults
+
+- name: Restart Nginx
+  service: name=nginx state=restarted

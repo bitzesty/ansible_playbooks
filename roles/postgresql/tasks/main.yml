@@ -1,0 +1,7 @@
+- name: ensure postgres is installed
+  apt: pkg=postgresql-9.3 state=latest update_cache=true
+  notify:
+    - restart postgres
+
+- name: ensure postgres starts on a fresh reboot
+  service: name=postgresql state=started enabled=yes

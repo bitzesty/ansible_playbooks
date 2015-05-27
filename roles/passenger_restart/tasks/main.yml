@@ -1,0 +1,8 @@
+---
+- name: restart passenger
+  command: chdir="{{ deploy_to }}/current/" mkdir -p tmp
+  environment: "{{ default_environment }}"
+
+- name: restart passenger
+  command: chdir="{{ deploy_to }}/current/" touch tmp/restart.txt
+  environment: "{{ default_environment }}"

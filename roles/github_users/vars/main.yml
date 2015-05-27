@@ -1,0 +1,7 @@
+add_ssh_keys_from_github:
+  usernames: [
+    "matthewford",
+    "RuslanHamidullin",
+    "dreamfall",
+    "jaleszek"
+  ]

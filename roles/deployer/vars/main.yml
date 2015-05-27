@@ -1,0 +1,6 @@
+---
+deployer_ssh_private_key: "{{ lookup('file', 'id_rsa') }}"
+deployer_ssh_public_key : "{{ lookup('file', 'id_rsa.pub') }}"
+deployer_authorized_keys: []
+deployer_ssh_keyscan_domains:
+  - github.com

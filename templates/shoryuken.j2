@@ -1,0 +1,4 @@
+#!/bin/sh
+cd {{ current_release_path }}
+exec 2>&1
+exec chpst -u{{ user }} bundle exec shoryuken -d -r {{ current_release_path }}/app/jobs/scan_job.rb -C {{ current_release_path }}/config/shoryuken.yml -L {{ current_release_path }}/shoryuken.log {% for key, value in app_environment_variables.items() %}{{ key }}={{ value }} {% endfor %}

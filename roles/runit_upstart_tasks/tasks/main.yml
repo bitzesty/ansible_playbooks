@@ -1,0 +1,11 @@
+- name: Runit | Create /etc/sv/shoryuken dir
+  command: mkdir -p /etc/sv/shoryuken
+
+- name: Runit | Copy shoryuken run file
+  template:
+    src=../ansible_playbooks/templates/shoryuken.j2
+    dest=/etc/sv/shoryuken/run
+    mode=755
+
+- name: Runit | Create symbolic link
+  file: src=/etc/sv/shoryuken dest=/etc/service/shoryuken state=link
